@@ -1,0 +1,14 @@
+node_modules/
+.env
+uploads/
+heatmaps/
+model/
+ai_training/venv/
+ai_training/dataset/
+ai_training/trained_model/
+ai_training/training_metrics.json
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
