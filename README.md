@@ -7,6 +7,8 @@ Nedhir Limam — Beher Hewech — Adam Zmerli — Mohamed Amine Ben Hasan — Ra
 
 > **Disclaimer:** This application is an educational prototype created for a hackathon. It is not a certified medical device and must not be used for real clinical diagnosis under any circumstances.
 
+> **Internet required:** This application requires an active internet connection at all times. The AI analysis is performed by the Google Gemini API, and the database is hosted on MongoDB Atlas — both are cloud services that cannot function offline.
+
 ---
 
 ## Table of Contents
@@ -114,17 +116,21 @@ npm --version
 ```
 You should see version numbers printed for both.
 
-### 2. MongoDB Community Server
+### 2. A MongoDB Atlas account (free, no install required)
 
-Download from: https://www.mongodb.com/try/download/community
+This project uses MongoDB Atlas — a cloud-hosted database. No local MongoDB installation is needed.
 
-During installation, choose the option to install MongoDB as a Windows Service so it starts automatically. Alternatively, you can use **MongoDB Compass** (the GUI), which starts the local server when you open it.
+1. Go to: https://cloud.mongodb.com and create a free account
+2. Create a free **M0** cluster (select any region close to you)
+3. Under **Database Access**, create a database user with a username and password
+4. Under **Network Access**, click **Add IP Address** and select **Allow Access from Anywhere** (0.0.0.0/0)
+5. On your cluster page, click **Connect** → **Drivers**, then copy the connection string. It looks like:
+   ```
+   mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/medvision
+   ```
+   Replace `username` and `password` with the credentials you created.
 
-To verify MongoDB is running, open MongoDB Compass and connect to:
-```
-mongodb://localhost:27017
-```
-If it connects, MongoDB is running.
+You will paste this connection string into the `.env` file in Step 5.
 
 ### 3. Git
 
@@ -185,20 +191,23 @@ Create a file named `.env` inside the `server/` folder with the following conten
 ```
 PORT=5000
 NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/medvision
+MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/medvision
 GEMINI_API_KEY=your_gemini_api_key_here
 JWT_SECRET=medvision-hackathon-2026-secret-key
 JWT_EXPIRES_IN=8h
 CLIENT_URL=http://localhost:5173
 ```
 
-Replace `your_gemini_api_key_here` with the API key you obtained in the prerequisites step.
+Replace `MONGO_URI` with the full Atlas connection string from Step 2.  
+Replace `GEMINI_API_KEY` with the API key from Step 2 in the prerequisites.  
+
+Do not share this file or commit it to a public repository — it contains your credentials.
 
 ### Step 6 — Seed the database with demo data
 
 This step creates a demo user account and 20 sample predictions so the dashboard and history pages are not empty on first run.
 
-Make sure MongoDB is running, then from inside the `server/` folder run:
+Make sure your Atlas connection string is correctly set in `server/.env`, then from inside the `server/` folder run:
 
 ```bash
 node src/utils/seedData.js
