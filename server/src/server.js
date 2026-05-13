@@ -72,10 +72,11 @@ app.use((_req, res) => res.status(404).json({ error: 'Route not found' }))
 app.use(errorHandler)
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
-connectDB().then(() => {
-  app.listen(config.port, () => {
-    console.log(`🚀 MedVision AI server running at http://localhost:${config.port}`)
-    console.log(`🤖 AI Engine: Google Gemini 1.5 Flash`)
-    console.log(`⚠️  Educational prototype — not for medical use`)
-  })
+// Start HTTP server immediately, then attempt DB connection in background
+app.listen(config.port, () => {
+  console.log(`🚀 MedVision AI server running at http://localhost:${config.port}`)
+  console.log(`🤖 AI Engine: Google Gemini 1.5 Flash`)
+  console.log(`⚠️  Educational prototype — not for medical use`)
 })
+
+connectDB()
